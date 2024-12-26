@@ -14,7 +14,6 @@ resource "aws_lightsail_instance" "microk8s" {
     instance_index    = count.index,
     control_plane_ip  = aws_lightsail_instance.microk8s[0].private_ip_address
   })
-  private_networking = true
 
   add_on {
     name          = "AutoSnapshot"
@@ -46,37 +45,6 @@ resource "aws_lightsail_instance_public_ports" "microk8s_ports" {
   port_info {
     from_port = 16443 # Kubernetes API
     to_port   = 16443
-    protocol  = "tcp"
-  }
-
-  # Private-facing ports (MicroK8s HA cluster communication)
-  port_info {
-    from_port = 19001 # dqlite
-    to_port   = 19001
-    protocol  = "tcp"
-  }
-
-  port_info {
-    from_port = 25000 # Worker communication
-    to_port   = 25000
-    protocol  = "tcp"
-  }
-
-  port_info {
-    from_port = 10250 # Kubelet API
-    to_port   = 10250
-    protocol  = "tcp"
-  }
-
-  port_info {
-    from_port = 12379 # Etcd
-    to_port   = 12379
-    protocol  = "tcp"
-  }
-
-  port_info {
-    from_port = 10255 # Read-only Kubelet API
-    to_port   = 10255
     protocol  = "tcp"
   }
 }
