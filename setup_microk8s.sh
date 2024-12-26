@@ -7,7 +7,7 @@ snap install microk8s --classic
 usermod -aG microk8s ubuntu
 
 # Enable essential MicroK8s add-ons
-microk8s enable dns storage
+microk8s enable dns storage dashboard
 
 # Allow some time for MicroK8s to start
 sleep 30
