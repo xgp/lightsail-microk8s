@@ -2,13 +2,16 @@ provider "aws" {
   region = "us-east-1"
 }
 
+variable "availability_zones" {
+  default = ["us-east-1a", "us-east-1b", "us-east-1c"]
+}
+
 resource "aws_lightsail_instance" "microk8s" {
   count              = var.instance_count
   name               = "microk8s-${count.index}"
-  availability_zone  = "us-east-1a"
+  availability_zone  = var.availability_zones[count.index % length(var.availability_zones)] # Rotate across zones
   blueprint_id       = "ubuntu_24_04"
-  # bundle_id          = "2xlarge_3_0"
-  bundle_id          = "nano_2_0"
+  bundle_id          = var.bundle_id
   key_pair_name      = aws_lightsail_key_pair.microk8s_key_pair.name
   user_data          = templatefile("setup_microk8s.sh", {
     instance_index    = count.index,

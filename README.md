@@ -1,5 +1,8 @@
 # microk8s on AWS Lightsail
 
+## Goals
+Quickly deploy a somewhat resilient k8s cluster on AWS without a bunch of extra garbage. Assumes you will use Cloudflare or NGrok to do tunnels and ingress via tunnel.
+
 ### How It Works
 1. The **first instance (index 0)** initializes the HA cluster using `microk8s enable ha-cluster`.
 2. Subsequent instances (indices 1, 2, ...) join the cluster using the `microk8s join` command, dynamically obtained from the first node.
@@ -26,5 +29,6 @@ terraform apply
   ```
 
 ### Notes
-- **Instance Networking**: Lightsail instances must have networking rules allowing communication on required ports (2379, 25000, etc)
+- **Instance Networking**: Lightsail instances must have networking rules allowing communication on required ports (2379, 25000, etc) on private network (this is the default)
+- **External Networking**: Lightsail Firewall allows SSH and k8s API to the outside world. Lock these down further (via bastion or IP restriction) for better security.
 
